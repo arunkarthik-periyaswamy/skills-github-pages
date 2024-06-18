@@ -22,6 +22,9 @@ jobs:
           echo "title:  'Blog post for ${{ env.DATE }}'" >> _posts/${{ env.DATE }}.md
           echo "---" >> _posts/${{ env.DATE }}.md
           echo "Your blog content here..." >> _posts/${{ env.DATE }}.md
+      
+      - name: debug
+        run: echo "ACTIONS_STEP_DEBUG=true" >> $GITHUB_ENV
 
       - name: Commit changes
         uses: stefanzweifel/git-auto-commit-action@v5.0.1
