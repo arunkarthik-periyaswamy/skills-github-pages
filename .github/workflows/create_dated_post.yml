@@ -2,7 +2,7 @@ name: Create and Commit Dated Post
 
 on:
   schedule:
-    - cron:  '55 19 * * *'  # Runs daily at midnight UTC
+    - cron:  '58 2 * * *'  # Runs daily at midnight UTC
 
 jobs:
   create_post:
