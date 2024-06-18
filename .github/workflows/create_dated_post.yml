@@ -1,47 +1,78 @@
-name: Create and Commit Dated Post
+# name: Create and Commit Dated Post
 
+# on:
+#   schedule:
+#     - cron:  '53 10 * * *'  # Runs daily at midnight UTC
+#   workflow_dispatch:
+#   push:
+#     paths:
+#       - _posts/*.md
+      
+# # Reference: https://docs.github.com/en/actions/security-guides/automatic-token-authentication
+# permissions:
+#   # Need `contents: read` to checkout the repository.
+#   # Need `contents: write` to update the step metadata.
+#   contents: write
+  
+# jobs:
+#   create_post:
+#     runs-on: ubuntu
+
+#     steps:
+#       - name: Get current date
+#         id: date
+#         run: echo "{date}={date}" >> $GITHUB_OUTPUT
+        
+#       - name: Checkout repository
+#         uses: actions/checkout@v3
+
+#       - name: Get current date
+#         run: echo "DATETIME=$(date +'%Y-%m-%d_%H-%M-%S')" >> $GITHUB_ENV
+
+#       - name: Create markdown file
+#         run: |
+#           echo "---" >> _posts/${{ env.DATE }}-blog.md
+#           echo "layout: post" >> _posts/${{ env.DATE }}-blog.md
+#           echo "title:  'Blog post for ${{ env.DATE }}'" >> _posts/${{ env.DATE }}-blog.md
+#           echo "---" >> _posts/${{ env.DATE }}-blog.md
+#           echo "Your blog content here..." >> _posts/${{ env.DATE }}-blog.md
+      
+#       - name: debug
+#         run: echo "ACTIONS_STEP_DEBUG=true" >> $GITHUB_ENV
+
+#       - name: Commit changes
+#         uses: stefanzweifel/git-auto-commit-action@v5.0.1
+#         with:
+#           commit_message: Add new blog post for ${{ env.DATE }}
+name: Test Workflow with Cron and Debug
+
+# Set a frequent schedule for testing (e.g., every 5 minutes)
 on:
   schedule:
-    - cron:  '53 10 * * *'  # Runs daily at midnight UTC
-  workflow_dispatch:
-  push:
-    paths:
-      - _posts/*.md
-      
-# Reference: https://docs.github.com/en/actions/security-guides/automatic-token-authentication
-permissions:
-  # Need `contents: read` to checkout the repository.
-  # Need `contents: write` to update the step metadata.
-  contents: write
-  
+    - cron:  '*/5 * * * *'  # Every 5 minutes
+
 jobs:
-  create_post:
-    runs-on: ubuntu
+  test_job:
+    runs-on: ubuntu-latest
 
     steps:
-      - name: Get current date
-        id: date
-        run: echo "{date}={date}" >> $GITHUB_OUTPUT
-        
-      - name: Checkout repository
-        uses: actions/checkout@v3
-
-      - name: Get current date
-        run: echo "DATETIME=$(date +'%Y-%m-%d_%H-%M-%S')" >> $GITHUB_ENV
-
-      - name: Create markdown file
-        run: |
-          echo "---" >> _posts/${{ env.DATE }}-blog.md
-          echo "layout: post" >> _posts/${{ env.DATE }}-blog.md
-          echo "title:  'Blog post for ${{ env.DATE }}'" >> _posts/${{ env.DATE }}-blog.md
-          echo "---" >> _posts/${{ env.DATE }}-blog.md
-          echo "Your blog content here..." >> _posts/${{ env.DATE }}-blog.md
-      
-      - name: debug
+      - name: Enable debug logging
         run: echo "ACTIONS_STEP_DEBUG=true" >> $GITHUB_ENV
 
-      - name: Commit changes
-        uses: stefanzweifel/git-auto-commit-action@v5.0.1
-        with:
-          commit_message: Add new blog post for ${{ env.DATE }}
-          
+      - name: Checkout repository (if needed)
+        uses: actions/checkout@v3
+
+      - name: Print current time
+        run: echo "DATETIME=$(date +'%Y-%m-%d_%H-%M-%S')"
+
+      - name: Run your test commands
+        run: |
+          # Replace with your actual test commands or scripts
+          echo "Running test 1..."
+          sleep 5 
+          echo "Running test 2..."
+
+      - name: Additional debug logging
+        run: |
+          echo "Workflow completed successfully!"
+
