@@ -1,0 +1,30 @@
+name: Create and Commit Dated Post
+
+on:
+  schedule:
+    - cron:  '0 0 * * *'  # Runs daily at midnight UTC
+
+jobs:
+  create_post:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Get current date
+        run: echo "DATE=$(date +'%Y-%m-%d')" >> $GITHUB_ENV
+
+      - name: Create markdown file
+        run: |
+          echo "---" >> _posts/${{ env.DATE }}.md
+          echo "layout: post" >> _posts/${{ env.DATE }}.md
+          echo "title:  'Blog post for ${{ env.DATE }}'" >> _posts/${{ env.DATE }}.md
+          echo "---" >> _posts/${{ env.DATE }}.md
+          echo "Your blog content here..." >> _posts/${{ env.DATE }}.md
+
+      - name: Commit changes
+        uses: stefanzweifel/git-auto-commit-action@v5.0.1
+        with:
+          commit_message: Add new blog post for ${{ env.DATE }}
+          
