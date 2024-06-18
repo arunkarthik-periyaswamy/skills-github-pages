@@ -1,79 +1,26 @@
-# name: Create and Commit Dated Post
+name: Create and Commit Dated Post
 
-# on:
-#   schedule:
-#     - cron:  '58 8 * * *'  # Runs daily at midnight UTC
-#   workflow_dispatch:
-#   push:
-#     paths:
-#       - _posts/*.md
-      
-# # Reference: https://docs.github.com/en/actions/security-guides/automatic-token-authentication
-# permissions:
-#   # Need `contents: read` to checkout the repository.
-#   # Need `contents: write` to update the step metadata.
-#   contents: write
-  
-# jobs:
-#   create_post:
-#     runs-on: ubuntu-latest
-
-#     steps:
-#       - name: Checkout repository
-#         uses: actions/checkout@v3
-
-#       - name: Get current date
-#         run: echo "DATE=$(date +'%Y-%m-%d')" >> $GITHUB_ENV
-
-#       - name: Create markdown file
-#         run: |
-#           echo "---" >> _posts/${{ env.DATE }}-blog.md
-#           echo "layout: post" >> _posts/${{ env.DATE }}-blog.md
-#           echo "title:  'Blog post for ${{ env.DATE }}'" >> _posts/${{ env.DATE }}-blog.md
-#           echo "---" >> _posts/${{ env.DATE }}-blog.md
-#           echo "Your blog content here..." >> _posts/${{ env.DATE }}-blog.md
-      
-#       - name: debug
-#         run: echo "ACTIONS_STEP_DEBUG=true" >> $GITHUB_ENV
-
-#       - name: Commit changes
-#         uses: stefanzweifel/git-auto-commit-action@v5.0.1
-#         with:
-#           commit_message: Add new blog post for ${{ env.DATE }}
-          
-name: Daily Blog Post Creation and Step Update
-
-# This workflow now runs daily AND on manual/push triggers
 on:
   schedule:
-    - cron:  '22 21 * * *'  # Runs daily at 8:58 AM UTC (adjust as needed)
-  workflow_dispatch:     # Keep manual trigger
-  push:                 # Keep push trigger
-    branches:
-      - my-pages
+    - cron:  '* * * * *'  # Runs daily at midnight UTC
+  workflow_dispatch:
+  push:
     paths:
       - _posts/*.md
-
+      
+# Reference: https://docs.github.com/en/actions/security-guides/automatic-token-authentication
 permissions:
   # Need `contents: read` to checkout the repository.
   # Need `contents: write` to update the step metadata.
   contents: write
+  
 jobs:
-
-  create_post:    # This job now does TWO things
+  create_post:
     runs-on: ubuntu-latest
-
-    if: >-
-      ${{ !github.event.repository.is_template 
-          && (needs.get_current_step.outputs.current_step == 4
-              || github.event_name == 'schedule') }}  # Run on schedule too
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
-        with:
-          fetch-depth: 0 # Get all branches
-          ref: my-pages
 
       - name: Get current date
         run: echo "DATE=$(date +'%Y-%m-%d')" >> $GITHUB_ENV
@@ -82,20 +29,15 @@ jobs:
         run: |
           echo "---" >> _posts/${{ env.DATE }}-blog.md
           echo "layout: post" >> _posts/${{ env.DATE }}-blog.md
-          echo "title: 'Blog post for ${{ env.DATE }}'" >> _posts/${{ env.DATE }}-blog.md
+          echo "title:  'Blog post for ${{ env.DATE }}'" >> _posts/${{ env.DATE }}-blog.md
           echo "---" >> _posts/${{ env.DATE }}-blog.md
           echo "Your blog content here..." >> _posts/${{ env.DATE }}-blog.md
+      
+      - name: debug
+        run: echo "ACTIONS_STEP_DEBUG=true" >> $GITHUB_ENV
 
       - name: Commit changes
         uses: stefanzweifel/git-auto-commit-action@v5.0.1
         with:
           commit_message: Add new blog post for ${{ env.DATE }}
-
-      - name: Update to step 5  # This step only runs if the current step was 4
-        if: ${{ needs.get_current_step.outputs.current_step == 4 }} 
-        uses: skills/action-update-step@v2
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          from_step: 4
-          to_step: 5
-          branch_name: my-pages
+          
