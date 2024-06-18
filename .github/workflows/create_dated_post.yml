@@ -2,8 +2,18 @@ name: Create and Commit Dated Post
 
 on:
   schedule:
-    - cron:  '58 2 * * *'  # Runs daily at midnight UTC
-
+    - cron:  '25 8 * * *'  # Runs daily at midnight UTC
+  workflow_dispatch:
+  push:
+    paths:
+      - _posts/*.md
+      
+# Reference: https://docs.github.com/en/actions/security-guides/automatic-token-authentication
+permissions:
+  # Need `contents: read` to checkout the repository.
+  # Need `contents: write` to update the step metadata.
+  contents: write
+  
 jobs:
   create_post:
     runs-on: ubuntu-latest
