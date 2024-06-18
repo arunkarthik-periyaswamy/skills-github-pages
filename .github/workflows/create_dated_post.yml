@@ -2,7 +2,7 @@ name: Create and Commit Dated Post
 
 on:
   schedule:
-    - cron:  '38 10 * * *'  # Runs daily at midnight UTC
+    - cron:  '53 10 * * *'  # Runs daily at midnight UTC
   workflow_dispatch:
   push:
     paths:
@@ -16,7 +16,7 @@ permissions:
   
 jobs:
   create_post:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu
 
     steps:
       - name: Get current date
