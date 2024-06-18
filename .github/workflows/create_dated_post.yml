@@ -76,7 +76,7 @@ jobs:
           ref: my-pages
 
       - name: Get current date
-        run: echo "DATE=$(date)" >> $GITHUB_ENV
+        run: echo "DATE=$(date +'%Y-%m-%d')" >> $GITHUB_ENV
 
       - name: Create markdown file
         run: |
