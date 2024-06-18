@@ -2,7 +2,7 @@ name: Create and Commit Dated Post
 
 on:
   schedule:
-    - cron:  '33 8 * * *'  # Runs daily at midnight UTC
+    - cron:  '36 8 * * *'  # Runs daily at midnight UTC
   workflow_dispatch:
   push:
     paths:
@@ -29,7 +29,7 @@ jobs:
         run: |
           echo "---" >> _posts/${{ env.DATE }}.md
           echo "layout: post" >> _posts/${{ env.DATE }}.md
-          echo "title:  'Blog post for ${{ env.DATE }}'" >> _posts/'${{ env.DATE }}-blog'.md
+          echo "title:  'Blog post for ${{ env.DATE }}'" >> _posts/${{ env.DATE }}-blog.md
           echo "---" >> _posts/${{ env.DATE }}.md
           echo "Your blog content here..." >> _posts/${{ env.DATE }}.md
       
