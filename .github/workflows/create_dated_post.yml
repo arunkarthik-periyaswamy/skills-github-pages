@@ -16,7 +16,7 @@ permissions:
   
 jobs:
   create_post:
-    runs-on: ubuntu
+    runs-on: ubuntu-latest
 
     steps:
       - name: Get current date
