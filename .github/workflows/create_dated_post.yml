@@ -24,7 +24,7 @@ jobs:
         run: echo "{date}={date}" >> $GITHUB_OUTPUT
         
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Get current date
         run: echo "DATE=$(date +'%Y-%m-%d')" >> $GITHUB_ENV
@@ -61,7 +61,7 @@ jobs:
 #         run: echo "ACTIONS_STEP_DEBUG=true" >> $GITHUB_ENV
 
 #       - name: Checkout repository (if needed)
-#         uses: actions/checkout@v3
+#         uses: actions/checkout@v4
 
 #       - name: Print current time
 #         run: echo "DATETIME=$(date +'%Y-%m-%d_%H-%M-%S')"
